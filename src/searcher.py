@@ -1,6 +1,8 @@
+# searcher.py
 import json
 import math
 from utils import tokenize, stem_tokens
+from soundex import soundex
 
 # --------------------------
 # Load inverted index and doc lengths
@@ -12,9 +14,7 @@ with open("../output/doc_lengths.json", "r", encoding="utf-8") as f:
     doc_lengths = json.load(f)
 
 with open("../output/doc_id_to_name.json", "r", encoding="utf-8") as f:
-    doc_id_to_name = {int(k): v for k, v in json.load(f).items()}
-
-
+    doc_id_to_name = json.load(f)
 
 # Total number of documents
 N = len(doc_lengths)
@@ -46,14 +46,23 @@ for doc_id_str, length in doc_lengths.items():
     doc_vectors[doc_id] = weights
 
 # --------------------------
-# Query processing
+# Query processing (with Soundex fallback)
 # --------------------------
 def preprocess_query(query):
     tokens = tokenize(query)
     stems = stem_tokens(tokens)
     tf = {}
     for t in stems:
-        tf[t] = tf.get(t, 0) + 1
+        if t in dictionary:
+            tf[t] = tf.get(t, 0) + 1
+        else:
+            # Soundex fallback
+            t_code = soundex(t)
+            candidates = [term for term in dictionary.keys() if soundex(term) == t_code]
+            if candidates:
+                replacement = candidates[0]  # simple choice: first match
+                print(f"[Soundex] Replacing '{t}' with '{replacement}'")
+                tf[replacement] = tf.get(replacement, 0) + 1
     return tf
 
 def compute_query_weights(query_tf):
@@ -97,7 +106,7 @@ def search(query, top_k=10):
     scores.sort(key=lambda x: (-x[1], x[0]))
 
     # map doc_id to filename and return top_k
-    results = [(doc_id_to_name[doc_id], score) for doc_id, score in scores[:top_k]]
+    results = [(doc_id_to_name[str(doc_id)], score) for doc_id, score in scores[:top_k]]
     return results
 
 
@@ -105,7 +114,7 @@ def search(query, top_k=10):
 # Example usage
 # --------------------------
 if __name__ == "__main__":
-    query = "Uber"
+    query = "zoomato"   # try misspelling "zomato"
     top_docs = search(query)
     print("Top documents for query:", query)
     print(top_docs)
