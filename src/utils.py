@@ -1,6 +1,5 @@
 import os
 import re
-import nltk
 from collections import Counter
 
 # Make sure NLTK Porter stemmer is available
