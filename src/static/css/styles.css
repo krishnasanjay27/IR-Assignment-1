@@ -1,2 +1,53 @@
-/* src/static/css/styles.css */
-body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+/* --- Elegant Warm Gradient Background --- */
+body {
+    background: linear-gradient(135deg, #fdf6f0, #eaeaea); /* soft warm off-white to light gray */
+    color: #444; /* softer dark gray text */
+    font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  
+  /* --- Typography Refinements --- */
+  h1 {
+    font-family: 'Merriweather', serif; /* Serif for elegant title */
+    letter-spacing: 0.5px;
+  }
+  p {
+    line-height: 1.7;
+    color: #555;
+  }
+  
+  /* --- Result Card Hover Effect --- */
+  .result-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .result-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  }
+  .dark .result-card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  }
+  
+  /* --- Preview Button Hover Effect --- */
+  .preview-btn {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  .preview-btn:hover {
+    transform: scale(1.03);
+  }
+  
+  /* --- Preview Box Styling --- */
+  .preview-box {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    background: #f8fafc;
+    border-left: 4px solid #0d9488; /* refined teal accent */
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  .dark .preview-box {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-left-color: #0d9488;
+  }
+  
